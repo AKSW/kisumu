@@ -11,6 +11,7 @@ python = "^3.12"
 click = "^8.1.7"
 rdflib = "^7.1.1"
 loguru = "^0.7.2"
+jinja-rdf = {path = "../jinja-rdf", develop = true}
 
 
 [tool.poetry.group.test.dependencies]
@@ -23,3 +24,6 @@ ruff = "^0.7.4"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+kisumu = "kisumu:cli"
