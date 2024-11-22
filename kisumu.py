@@ -6,6 +6,7 @@ from rdflib.util import from_n3
 from jinja_rdf.rdf_resource import cast
 import jinja2
 from sys import stdout, stderr
+from pathlib import Path
 
 
 @click.group()
@@ -43,9 +44,9 @@ def build(template, graph, resource, output, compatibility):
     page = Page()
     page.rdf = cast(g.resource(from_n3(resource)))
 
-    templateLoader = jinja2.FileSystemLoader(searchpath="./")
+    templateLoader = jinja2.FileSystemLoader(searchpath="/")
     environment = jinja2.Environment(loader=templateLoader)
     environment.filters["property"] = rdf_property
     environment.filters["inv_property"] = rdf_inverse_property
-    template = environment.get_template(template)
+    template = environment.get_template(str(Path(template).absolute()))
     template.stream(page=page).dump(output, encoding="utf-8")
