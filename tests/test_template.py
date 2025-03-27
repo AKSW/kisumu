@@ -48,7 +48,7 @@ def test_query_filter():
     assert "Maggie Simpson" in output
 
 
-def test_query_filter():
+def test_query_filter_property():
     template = importlib.resources.read_text(
         kisumu, "example/query_family_property.jinja"
     )
