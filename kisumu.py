@@ -1,19 +1,66 @@
 import click
 from loguru import logger
-from jinja_rdf.rdf_property import rdf_property, rdf_inverse_property
-from rdflib import Graph
+from jinja_rdf.rdf_property import (
+    rdf_properties,
+    rdf_inverse_properties,
+    rdf_property,
+    rdf_inverse_property,
+)
+from jinja_rdf.sparql_query import sparql_query
+from rdflib import Graph, URIRef
 from rdflib.util import from_n3
-from jinja_rdf.rdf_resource import cast
+from jinja_rdf.rdf_resource import RDFResource
 import jinja2
-from sys import stdout, stderr
+import sys
 from pathlib import Path
+
+
+def cast_resource(graph: Graph, resource: RDFResource | URIRef):
+    """resource is the starting point of graph navigation"""
+    return RDFResource(resource)
+
+
+def jinja_template(template: str | jinja2.Template | Path, graph: Graph):
+    templateLoader = None
+    if isinstance(template, Path):
+        templateLoader = jinja2.FileSystemLoader(searchpath="/")
+    environment = jinja2.Environment(loader=templateLoader)
+    environment.filters["properties"] = rdf_properties
+    environment.filters["properties_inv"] = rdf_inverse_properties
+    environment.filters["property"] = rdf_property
+    environment.filters["property_inv"] = rdf_inverse_property
+    environment.filters["query"] = sparql_query
+    if isinstance(template, Path):
+        return environment.get_template(str(template))
+    else:
+        return environment.from_string(template)
+
+
+def render(
+    template: str | jinja2.Template | Path,
+    graph: Graph,
+    resource: RDFResource | URIRef | str,
+):
+    return jinja_template(template, graph).render(
+        resource=RDFResource(graph, resource), graph=graph
+    )
+
+
+def stream(
+    template: str | jinja2.Template | Path,
+    graph: Graph,
+    resource: RDFResource | URIRef | str,
+):
+    return jinja_template(template, graph).stream(
+        resource=RDFResource(graph, resource), graph=graph
+    )
 
 
 @click.group()
 @click.option("--loglevel", default="INFO")
 def cli(loglevel):
     logger.remove()
-    logger.add(stderr, level=loglevel)
+    logger.add(sys.stderr, level=loglevel)
     if loglevel in ["DEBUG"]:
         logger.debug(f"Loglevel is {loglevel}")
 
@@ -30,23 +77,17 @@ def cli(loglevel):
 @click.option("--output", "-o", default="-")
 def build(template, graph, resource, output, compatibility):
     if compatibility == "jekyll-rdf":
-        pass
+        click.echo(
+            "Currently there is no compatibility to jekyll-rdf implemented, it will probably not cover 100% but if you would like to implement some thing, please send me pull-requests."
+        )
+        return
 
     if output == "-":
-        output = stdout.buffer
-
-    class Page:
-        rdf = None
+        output = sys.stdout
 
     g = Graph()
     g.parse(graph)
 
-    page = Page()
-    page.rdf = cast(g.resource(from_n3(resource)))
-
-    templateLoader = jinja2.FileSystemLoader(searchpath="/")
-    environment = jinja2.Environment(loader=templateLoader)
-    environment.filters["property"] = rdf_property
-    environment.filters["inv_property"] = rdf_inverse_property
-    template = environment.get_template(str(Path(template).absolute()))
-    template.stream(page=page).dump(output, encoding="utf-8")
+    stream(
+        template=Path(template).absolute(), graph=g, resource=from_n3(resource)
+    ).dump(output)
