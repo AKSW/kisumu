@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-click = "^8.1.7"
+click = "^8.1.8"
 rdflib = "^7.1.1"
 loguru = "^0.7.2"
 jinja-rdf = {path = "../jinja-rdf", develop = true}
@@ -20,6 +20,7 @@ pytest = "^8.3.3"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7.4"
+simpsons-rdf = "^0.1.4"
 
 [build-system]
 requires = ["poetry-core"]
