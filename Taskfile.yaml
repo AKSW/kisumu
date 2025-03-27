@@ -1,0 +1,28 @@
+version: '3'
+
+tasks:
+  default:
+    desc: List the available tasks
+    aliasses: ['help']
+    cmds:
+      - task -l
+
+  install:
+    desc: Run poetry install
+    cmds:
+      - poetry install
+
+  test:
+    desc: Run pytest
+    comment: "Setting a PYTHONPATH is a good idea cf. https://stackoverflow.com/a/63785469"
+    env:
+      PYTHONPATH: .
+    cmds:
+      - poetry run pytest
+
+  format:
+    desc: Format the code
+    aliases: ["ruff"]
+    cmds:
+      - poetry run ruff format
+      - poetry run ruff check --fix
