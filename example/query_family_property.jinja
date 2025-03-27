@@ -1,0 +1,6 @@
+These are the members of the Simpsons family:
+{% set fam_query = "select ?member {" + resource.n3() + " fam:hasFamilyMember ?member}" -%}
+{%- set result = graph.query(fam_query) -%}
+{%- for mem in result -%}
+- {{ mem.member | property(FOAF.name) }}
+{% endfor%}

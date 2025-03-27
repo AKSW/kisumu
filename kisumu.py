@@ -9,6 +9,7 @@ from jinja_rdf.rdf_property import (
 from jinja_rdf.sparql_query import sparql_query
 from rdflib import Graph, URIRef
 from rdflib.util import from_n3
+from rdflib.namespace import Namespace
 from jinja_rdf.rdf_resource import RDFResource
 import jinja2
 import sys
@@ -31,14 +32,27 @@ def jinja_template(template: str | jinja2.Template | Path, graph: Graph):
         return environment.from_string(template)
 
 
+def get_context(graph: Graph, resource: RDFResource | URIRef | str):
+    n = {
+        prefix: Namespace(namespace)
+        for prefix, namespace in graph.namespace_manager.namespaces()
+    }
+    namespaces = {prefix.upper(): namespace for prefix, namespace in n.items()}
+    return {
+        **namespaces,
+        "resource": RDFResource(graph, resource),
+        "graph": graph,
+        "namespace_manager": graph.namespace_manager,
+        "n": n,
+    }
+
+
 def render(
     template: str | jinja2.Template | Path,
     graph: Graph,
     resource: RDFResource | URIRef | str,
 ):
-    return jinja_template(template, graph).render(
-        resource=RDFResource(graph, resource), graph=graph
-    )
+    return jinja_template(template, graph).render(get_context(graph, resource))
 
 
 def stream(
@@ -46,9 +60,7 @@ def stream(
     graph: Graph,
     resource: RDFResource | URIRef | str,
 ):
-    return jinja_template(template, graph).stream(
-        resource=RDFResource(graph, resource), graph=graph
-    )
+    return jinja_template(template, graph).stream(get_context(graph, resource))
 
 
 @click.group()
