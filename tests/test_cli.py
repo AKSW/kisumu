@@ -10,7 +10,7 @@ def test_build():
     with importlib.resources.path(
         simpsons_rdf, "simpsons.ttl"
     ) as graph_path, importlib.resources.path(
-        kisumu, "example/homer.jinja"
+        kisumu, "example/foaf_name.jinja"
     ) as template_path:
         result = runner.invoke(
             cli,

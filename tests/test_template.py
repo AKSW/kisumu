@@ -14,13 +14,13 @@ def test_graph():
 
 
 def test_render():
-    template = importlib.resources.read_text(kisumu, "example/homer.jinja")
+    template = importlib.resources.read_text(kisumu, "example/foaf_name.jinja")
     output = render(template=template, graph=simpsons.graph, resource=SIM.Homer)
     assert output == "Hello, Homer Simpson!"
 
 
 def test_stream():
     with StringIO() as output:
-        template = importlib.resources.read_text(kisumu, "example/homer.jinja")
+        template = importlib.resources.read_text(kisumu, "example/foaf_name.jinja")
         stream(template=template, graph=simpsons.graph, resource=SIM.Homer).dump(output)
         assert output.getvalue() == "Hello, Homer Simpson!"
