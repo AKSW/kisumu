@@ -40,7 +40,7 @@ def get_context(graph: Graph, resource: RDFResource | URIRef | str):
     namespaces = {prefix.upper(): namespace for prefix, namespace in n.items()}
     return {
         **namespaces,
-        "resource": RDFResource(graph, resource),
+        "resource": RDFResource(graph, resource, graph.namespace_manager),
         "graph": graph,
         "namespace_manager": graph.namespace_manager,
         "n": n,
