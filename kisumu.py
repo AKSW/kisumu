@@ -15,11 +15,6 @@ import sys
 from pathlib import Path
 
 
-def cast_resource(graph: Graph, resource: RDFResource | URIRef):
-    """resource is the starting point of graph navigation"""
-    return RDFResource(resource)
-
-
 def jinja_template(template: str | jinja2.Template | Path, graph: Graph):
     templateLoader = None
     if isinstance(template, Path):
