@@ -24,3 +24,8 @@ def test_stream():
         template = importlib.resources.read_text(kisumu, "example/foaf_name.jinja")
         stream(template=template, graph=simpsons.graph, resource=SIM.Homer).dump(output)
         assert output.getvalue() == "Hello, Homer Simpson!"
+
+def test_query():
+    template = importlib.resources.read_text(kisumu, "example/query_family.jinja")
+    output = render(template=template, graph=simpsons.graph, resource=SIM.Homer)
+    assert output == "Hello, Homer Simpson!"
