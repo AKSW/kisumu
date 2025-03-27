@@ -25,7 +25,24 @@ def test_stream():
         stream(template=template, graph=simpsons.graph, resource=SIM.Homer).dump(output)
         assert output.getvalue() == "Hello, Homer Simpson!"
 
+
 def test_query():
     template = importlib.resources.read_text(kisumu, "example/query_family.jinja")
-    output = render(template=template, graph=simpsons.graph, resource=SIM.Homer)
-    assert output == "Hello, Homer Simpson!"
+    output = render(template=template, graph=simpsons.graph, resource=SIM.TheSimpsons)
+    assert "Homer Simpson" in output
+    assert "Marge Simpson" in output
+    assert "Bart Simpson" in output
+    assert "Lisa Simpson" in output
+    assert "Maggie Simpson" in output
+
+
+def test_query_filter():
+    template = importlib.resources.read_text(
+        kisumu, "example/query_filter_family.jinja"
+    )
+    output = render(template=template, graph=simpsons.graph, resource=SIM.TheSimpsons)
+    assert "Homer Simpson" in output
+    assert "Marge Simpson" in output
+    assert "Bart Simpson" in output
+    assert "Lisa Simpson" in output
+    assert "Maggie Simpson" in output

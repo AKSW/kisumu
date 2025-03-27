@@ -1,0 +1,6 @@
+These are the members of the Simpsons family:
+{% set fam_query = "select ?name {?resourceUri fam:hasFamilyMember [ foaf:name ?name]}" -%}
+{%- set result = resource | query(fam_query) -%}
+{%- for mem in result -%}
+- {{ mem["name"] }}
+{% endfor%}
