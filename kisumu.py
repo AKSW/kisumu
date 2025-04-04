@@ -18,8 +18,10 @@ from pathlib import Path
 
 def jinja_template(template: str | jinja2.Template | Path, graph: Graph):
     templateLoader = None
+    searchpath = ["."]
     if isinstance(template, Path):
-        templateLoader = jinja2.FileSystemLoader(searchpath=".")
+        searchpath.insert(0, str(template.parent))
+    templateLoader = jinja2.FileSystemLoader(searchpath=searchpath)
     environment = jinja2.Environment(loader=templateLoader)
     environment.filters["properties"] = rdf_properties
     environment.filters["properties_inv"] = rdf_inverse_properties
