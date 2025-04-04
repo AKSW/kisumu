@@ -16,9 +16,16 @@ import sys
 from pathlib import Path
 
 
-def jinja_template(template: str | jinja2.Template | Path, graph: Graph):
+def jinja_template(
+    template: str | jinja2.Template | Path,
+    graph: Graph,
+    template_searchpath: Path = None,
+):
     templateLoader = None
-    searchpath = ["."]
+    """Configure the searchpath to look in the current directory, so that it
+    find templates specified with relative paths, and in the templates parent so
+    that it find relative includes."""
+    searchpath = [template_searchpath or "."]
     if isinstance(template, Path):
         searchpath.insert(0, str(template.parent))
     templateLoader = jinja2.FileSystemLoader(searchpath=searchpath)
@@ -53,16 +60,22 @@ def render(
     template: str | jinja2.Template | Path,
     graph: Graph,
     resource: RDFResource | URIRef | str,
+    template_searchpath: Path = None,
 ):
-    return jinja_template(template, graph).render(get_context(graph, resource))
+    return jinja_template(template, graph, template_searchpath).render(
+        get_context(graph, resource)
+    )
 
 
 def stream(
     template: str | jinja2.Template | Path,
     graph: Graph,
     resource: RDFResource | URIRef | str,
+    template_searchpath: Path = None,
 ):
-    return jinja_template(template, graph).stream(get_context(graph, resource))
+    return jinja_template(template, graph, template_searchpath).stream(
+        get_context(graph, resource)
+    )
 
 
 @click.group()
@@ -76,6 +89,7 @@ def cli(loglevel):
 
 @cli.command()
 @click.option("--template", "-t")
+@click.option("--template-searchpath", "-s", default=None)
 @click.option("--graph", "-g")
 @click.option(
     "--resource",
@@ -84,7 +98,7 @@ def cli(loglevel):
 )
 @click.option("--compatibility", "-c", default=None)
 @click.option("--output", "-o", default="-")
-def build(template, graph, resource, output, compatibility):
+def build(template, template_searchpath, graph, resource, output, compatibility):
     if compatibility == "jekyll-rdf":
         click.echo(
             "Currently there is no compatibility to jekyll-rdf implemented, it will probably not cover 100% but if you would like to implement some thing, please send me pull-requests."
@@ -94,9 +108,15 @@ def build(template, graph, resource, output, compatibility):
     if output == "-":
         output = sys.stdout
 
+    if template_searchpath:
+        template_searchpath = Path(template_searchpath)
+
     g = Graph()
     g.parse(graph)
 
     stream(
-        template=Path(template), graph=g, resource=from_n3(resource)
+        template=Path(template),
+        graph=g,
+        resource=from_n3(resource),
+        template_searchpath=template_searchpath,
     ).dump(output)
