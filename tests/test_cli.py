@@ -1,4 +1,3 @@
-import kisumu
 from click.testing import CliRunner
 from kisumu import cli
 import importlib.resources
@@ -7,9 +6,7 @@ import simpsons_rdf
 
 def test_build():
     runner = CliRunner()
-    with importlib.resources.path(
-        simpsons_rdf, "simpsons.ttl"
-    ) as graph_path:
+    with importlib.resources.path(simpsons_rdf, "simpsons.ttl") as graph_path:
         result = runner.invoke(
             cli,
             [
