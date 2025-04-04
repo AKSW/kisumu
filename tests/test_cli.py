@@ -9,15 +9,13 @@ def test_build():
     runner = CliRunner()
     with importlib.resources.path(
         simpsons_rdf, "simpsons.ttl"
-    ) as graph_path, importlib.resources.path(
-        kisumu, "example/foaf_name.jinja"
-    ) as template_path:
+    ) as graph_path:
         result = runner.invoke(
             cli,
             [
                 "build",
                 "--template",
-                str(template_path),
+                "example/foaf_name.jinja",
                 "--graph",
                 str(graph_path),
                 "--resource",

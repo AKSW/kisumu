@@ -19,7 +19,7 @@ from pathlib import Path
 def jinja_template(template: str | jinja2.Template | Path, graph: Graph):
     templateLoader = None
     if isinstance(template, Path):
-        templateLoader = jinja2.FileSystemLoader(searchpath="/")
+        templateLoader = jinja2.FileSystemLoader(searchpath=".")
     environment = jinja2.Environment(loader=templateLoader)
     environment.filters["properties"] = rdf_properties
     environment.filters["properties_inv"] = rdf_inverse_properties
@@ -96,5 +96,5 @@ def build(template, graph, resource, output, compatibility):
     g.parse(graph)
 
     stream(
-        template=Path(template).absolute(), graph=g, resource=from_n3(resource)
+        template=Path(template), graph=g, resource=from_n3(resource)
     ).dump(output)
