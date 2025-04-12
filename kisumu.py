@@ -1,12 +1,6 @@
 import click
 from loguru import logger
-from jinja_rdf.rdf_property import (
-    rdf_properties,
-    rdf_inverse_properties,
-    rdf_property,
-    rdf_inverse_property,
-)
-from jinja_rdf.sparql_query import sparql_query
+from jinja_rdf import register_filters
 from rdflib import Graph, URIRef
 from rdflib.util import from_n3
 from rdflib.namespace import Namespace
@@ -30,11 +24,7 @@ def jinja_template(
         searchpath.insert(0, str(template.parent))
     templateLoader = jinja2.FileSystemLoader(searchpath=searchpath)
     environment = jinja2.Environment(loader=templateLoader)
-    environment.filters["properties"] = rdf_properties
-    environment.filters["properties_inv"] = rdf_inverse_properties
-    environment.filters["property"] = rdf_property
-    environment.filters["property_inv"] = rdf_inverse_property
-    environment.filters["query"] = sparql_query
+    register_filters(environment)
     if isinstance(template, Path):
         return environment.get_template(str(template))
     else:
