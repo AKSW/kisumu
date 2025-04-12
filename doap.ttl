@@ -1,0 +1,12 @@
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<https://github.com/white-gecko/kisumu> a doap:Project ;
+    doap:name "Kisumu" ;
+    doap:description "A simple cli in front of Jinja-RDF" ;
+    doap:developer <https://github.com/white-gecko>, <https://natanael.arndt.xyz/#i> ;
+    skos:note """
+## TODO
+- namespace prefixes should be supported in the templates
+- namespace prefixes should be supported when specifying a resource in the cli
+""" .
