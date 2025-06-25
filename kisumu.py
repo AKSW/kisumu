@@ -1,9 +1,8 @@
 import click
 from loguru import logger
-from jinja_rdf import register_filters
+from jinja_rdf import register_filters, get_context
 from rdflib import Graph, URIRef
 from rdflib.util import from_n3
-from rdflib.namespace import Namespace
 from jinja_rdf.rdf_resource import RDFResource
 import jinja2
 import sys
@@ -29,21 +28,6 @@ def jinja_template(
         return environment.get_template(str(template))
     else:
         return environment.from_string(template)
-
-
-def get_context(graph: Graph, resource: RDFResource | URIRef | str):
-    n = {
-        prefix: Namespace(namespace)
-        for prefix, namespace in graph.namespace_manager.namespaces()
-    }
-    namespaces = {prefix.upper(): namespace for prefix, namespace in n.items()}
-    return {
-        **namespaces,
-        "resource": RDFResource(graph, resource, graph.namespace_manager),
-        "graph": graph,
-        "namespace_manager": graph.namespace_manager,
-        "n": n,
-    }
 
 
 def render(
