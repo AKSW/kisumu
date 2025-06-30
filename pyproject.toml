@@ -11,7 +11,7 @@ python = "^3.12"
 click = "^8.1.8"
 rdflib = "^7.1.1"
 loguru = "^0.7.2"
-jinja-rdf = {path = "../jinja-rdf", develop = true}
+jinja-rdf = "^0.1.0"
 
 
 [tool.poetry.group.test.dependencies]
