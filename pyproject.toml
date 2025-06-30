@@ -18,7 +18,7 @@ build-backend = "poetry.core.masonry.api"
 name = "kisumu"
 description = "A command line interface for jinja-rdf"
 license = "EUPL-1.2"
-version = "0.1.1"
+version = "0.1.2"
 readme = "README.md"
 authors = [{name = "Natanael Arndt", email = "arndtn@gmail.com"}]
 requires-python = '>=3.12,<4.0'
