@@ -16,4 +16,4 @@ A simple cli in front of [Jinja RDF](https://github.com/AKSW/jinja-rdf) to rende
 
 - [Jinja RDF](https://github.com/AKSW/jinja-rdf)
 - [MkRdf](https://github.com/AKSW/mkrdf)
-- [Jekyll RDF](https://github.com/AKSW/jekyll-rdf) ([read about the relation](https://github.com/AKSW/jinja-rdf/blob/main/README.md#jekyll-rdf))
+- [Jekyll RDF](https://github.com/AKSW/jekyll-rdf) ([read about the relation](https://github.com/AKSW/mkrdf/blob/main/README.md#jekyll-rdf))
