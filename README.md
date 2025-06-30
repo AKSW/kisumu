@@ -1,5 +1,9 @@
 # Kisumu
 
+> [!WARNING]
+>
+> This project is still under development, the interface are unstable and might break in future versions.
+
 A simple cli in front of [Jinja RDF](https://github.com/AKSW/jinja-rdf) to render a template + an RDF graph -> a static document.
 
 > [!NOTE]
