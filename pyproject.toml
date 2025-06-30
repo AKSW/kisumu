@@ -26,3 +26,6 @@ dependencies = ['click (>=8.1.8,<9.0.0)', 'rdflib (>=7.1.1,<8.0.0)', 'loguru (>=
 
 [project.scripts]
 kisumu = "kisumu:cli"
+
+[project.urls]
+repository = "https://github.com/aksw/kisumu"
